@@ -1,0 +1,59 @@
+[
+  {
+    "id": 1676269842270,
+    "firstName": "Charles",
+    "lastName": "Dmello",
+    "email": "charles@gmail.com",
+    "contact": "7777777777",
+    "dob": "21/02/2000",
+    "doj": "25/02/2020",
+    "level": "Manager",
+    "manager": "na"
+  },
+  {
+    "id": 1676269980153,
+    "firstName": "Adil",
+    "lastName": "lanka",
+    "email": "ravan1@gmail.com",
+    "contact": "7777777777",
+    "dob": "21/02/2000",
+    "doj": "25/02/2020",
+    "level": "Developer",
+    "manager": "1676269842270"
+  },
+  {
+    "id": 1676280913068,
+    "firstName": "Alfroy",
+    "lastName": "Narula",
+    "email": "alfroy@gmail.com",
+    "contact": "7777777777",
+    "dob": "21/02/2000",
+    "doj": "25/02/2020",
+    "level": "Intern",
+    "manager": "1676269980153"
+  },
+  {
+    "id": 1676371807670,
+    "firstName": "Melinda",
+    "lastName": "Gates",
+    "email": "melinda@gmail.com",
+    "contact": "7777777777",
+    "dob": "21/02/2000",
+    "doj": "25/02/2020",
+    "level": "Intern",
+    "supervisor": "Developer",
+    "manager": "1676269980153"
+  },
+  {
+    "id": 1676430711178,
+    "firstName": "Nelson",
+    "lastName": "Mandela",
+    "email": "nelson@gmail.com",
+    "contact": "5555555555",
+    "dob": "21/02/2000",
+    "doj": "25/02/2020",
+    "level": "Intern",
+    "supervisor": "Manager",
+    "manager": "1676269980153"
+  }
+]
