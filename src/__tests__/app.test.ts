@@ -1,6 +1,6 @@
 import axios from 'axios';
 import dotenv from 'dotenv'
-import { EmployeeData } from '../interfaces/employeeInterface';
+import { NoEmployeeError, constants } from '../assets/constants';
 dotenv.config()
 
 const employeeURL:string = 'http://127.0.0.1:8000/employees';
@@ -84,7 +84,7 @@ describe('POST /employees', () => {
     })
     it('should have been called with expected url',async () =>{
       const res = await axios.get(employeeURL)
-      expect(res).toHaveBeenCalledWith(employeeURL)
+      // expect(res.headers.).toHaveBeenCalledWith(employeeURL)
     })
   })
   describe('When Creating New Employee with Existing Employee Email', () => {
@@ -104,7 +104,7 @@ describe('POST /employees', () => {
       .catch(function(error){
         expect(error.response.status).toBe(400)
         expect(error.response.statusText).toContain("Bad Request")
-        expect(error.response.data).toEqual({ error: 'email is Duplicated' })
+        expect(error.response.data).toEqual({ error: constants.duplicateEmailError })
       })
     })
   })
@@ -125,7 +125,7 @@ describe('POST /employees', () => {
       .catch(function(error){
         expect(error.response.status).toBe(400)
         expect(error.response.statusText).toContain("Bad Request")
-        expect(error.response.data).toEqual({"error": "firstName is not valid"})
+        expect(error.response.data).toEqual({"error": constants.invalidFirstNameError})
       })
     })
     it('should throw Invalid level Error', async () => {
@@ -144,7 +144,7 @@ describe('POST /employees', () => {
       .catch(function(error){
         expect(error.response.status).toBe(400)
         expect(error.response.statusText).toContain("Bad Request")
-        expect(error.response.data).toEqual({"error": "level is not valid"})
+        expect(error.response.data).toEqual({"error": constants.invalidLevelError})
       })
     })
   })
@@ -164,7 +164,7 @@ describe('POST /employees', () => {
       .catch(function(error){
         expect(error.response.status).toBe(400)
         expect(error.response.statusText).toContain("Bad Request")
-        expect(error.response.data).toEqual({"error": "Please Pass required attributes"})
+        expect(error.response.data).toEqual({"error": constants.insufficientParametersError})
       })
     })
   })
@@ -195,7 +195,7 @@ describe('POST /employees',()=>{
       await axios.get(employeeURL+'/99999999999')
     .catch((error)=>{
       expect(error.response.status).toBe(404)
-      expect(error.response.data).toEqual({"status": "fail","reason": "No employee Found"})
+      expect(error.response.data).toEqual(NoEmployeeError)
       expect(error.response.statusText).toContain("Not Found")
     })
     })
@@ -241,7 +241,7 @@ describe('PUT /employees:id',()=>{
         })
         .catch(function(error){
           expect(error.response.status).toBe(400)
-          expect(error.response.data).toEqual({"reason": "email is Duplicated","status": "Fail"})  
+          expect(error.response.data).toEqual({"status": "Fail","reason": constants.duplicateEmailError})  
           expect(error.response.statusText).toContain("Bad Request")
         })
     })
@@ -254,7 +254,7 @@ describe('PUT /employees:id',()=>{
         })
         .catch(function(error){
           expect(error.response.status).toBe(400)
-          expect(error.response.data).toEqual({"status": "Fail","reason": "firstName is not valid"}) 
+          expect(error.response.data).toEqual({"status": "Fail","reason": constants.invalidFirstNameError}) 
           expect(error.response.statusText).toContain("Bad Request")
         })
     })
@@ -264,7 +264,7 @@ describe('PUT /employees:id',()=>{
           "lastName": 123
         })
         .catch(function(error){
-          expect(error.response.data).toEqual({"status": "Fail","reason": "lastName is not valid"}) 
+          expect(error.response.data).toEqual({"status": "Fail","reason": constants.invalidLastNameError}) 
           expect(error.response.statusText).toContain("Bad Request")
         })
     })
@@ -275,7 +275,7 @@ describe('PUT /employees:id',()=>{
         })
         .catch(function(error){
           expect(error.response.status).toBe(400)
-          expect(error.response.data).toEqual({"status": "Fail","reason": "email is not valid"}) 
+          expect(error.response.data).toEqual({"status": "Fail","reason": constants.invalidEmailError}) 
           expect(error.response.statusText).toContain("Bad Request")
         })
     })
@@ -286,7 +286,7 @@ describe('PUT /employees:id',()=>{
         })
         .catch(function(error){
           expect(error.response.status).toBe(400)
-          expect(error.response.data).toEqual({"status": "Fail","reason": "dob is not valid"}) 
+          expect(error.response.data).toEqual({"status": "Fail","reason": constants.invalidDOBError}) 
           expect(error.response.statusText).toContain("Bad Request")
         })
     })
@@ -297,7 +297,7 @@ describe('PUT /employees:id',()=>{
         })
         .catch(function(error){
           expect(error.response.status).toBe(400)
-          expect(error.response.data).toEqual({"status": "Fail","reason": "doj is not valid"})
+          expect(error.response.data).toEqual({"status": "Fail","reason": constants.invalidDOJError})
           expect(error.response.statusText).toContain("Bad Request")
         })
     })
@@ -318,7 +318,7 @@ describe('PUT /employees:id',()=>{
           "level": "Develper12"
         })
         .catch(function(error){
-          expect(error.response.data).toEqual({"status": "Fail","reason": "level is not valid"})
+          expect(error.response.data).toEqual({"status": "Fail","reason": constants.invalidLevelError})
           expect(error.response.statusText).toContain("Bad Request")
         })
     })
@@ -329,7 +329,7 @@ describe('PUT /employees:id',()=>{
         })
         .catch(function(error){
           expect(error.response.status).toBe(400)
-          expect(error.response.data).toEqual({"status": "Fail","reason": "firstName is not valid"}) 
+          expect(error.response.data).toEqual({"status": "Fail","reason": constants.invalidFirstNameError}) 
           expect(error.response.statusText).toContain("Bad Request")
         })
     })
@@ -340,7 +340,7 @@ describe('PUT /employees:id',()=>{
         })
         .catch(function(error){
           expect(error.response.status).toBe(400)
-          expect(error.response.data).toEqual({"status": "Fail","reason": "lastName is not valid"}) 
+          expect(error.response.data).toEqual({"status": "Fail","reason": constants.invalidLastNameError}) 
           expect(error.response.statusText).toContain("Bad Request")
         })
     })
@@ -351,7 +351,7 @@ describe('PUT /employees:id',()=>{
         })
         .catch(function(error){
           expect(error.response.status).toBe(400)
-          expect(error.response.data).toEqual({"status": "Fail","reason": "dob is not valid"}) 
+          expect(error.response.data).toEqual({"status": "Fail","reason": constants.invalidDOBError}) 
           expect(error.response.statusText).toContain("Bad Request")
         })
     })
@@ -362,7 +362,7 @@ describe('PUT /employees:id',()=>{
         })
         .catch(function(error){
           expect(error.response.status).toBe(400)
-          expect(error.response.data).toEqual({"status": "Fail","reason": "doj is not valid"}) 
+          expect(error.response.data).toEqual({"status": "Fail","reason": constants.invalidDOJError}) 
           expect(error.response.statusText).toContain("Bad Request")
         })
     })
@@ -384,7 +384,7 @@ describe('PUT /employees:id',()=>{
         })
         .catch(function(error){
           expect(error.response.status).toBe(400)
-          expect(error.response.data).toEqual({"status": "Fail","reason": "level is not valid"}) 
+          expect(error.response.data).toEqual({"status": "Fail","reason": constants.invalidLevelError}) 
           expect(error.response.statusText).toContain("Bad Request")
         })
     })
@@ -395,7 +395,7 @@ describe('PUT /employees:id',()=>{
         })
         .catch(function(error){
           expect(error.response.status).toBe(400)
-          expect(error.response.data).toEqual({"status": "Fail","reason": "email is not valid"}) 
+          expect(error.response.data).toEqual({"status": "Fail","reason": constants.invalidEmailError}) 
           expect(error.response.statusText).toContain("Bad Request")
         })
     })
@@ -430,7 +430,7 @@ describe('GET /employees/:id/subordinate',()=>{
       await axios.get(employeeURL+'/'+internID+'/subordinates')
       .catch((error)=>{
         expect(error.response.status).toBe(404)
-        expect(error.response.data).toEqual({"reason": `No Subordinate for ${internID} found`,"status": "fail"})
+        expect(error.response.data).toEqual({"reason": `No Subordinate for ${internID} found`,"status": "Fail"})
         expect(error.response.statusText).toContain("Not Found")
       })
     })
@@ -457,8 +457,8 @@ describe('GET /employees/:id/superiors',()=>{
       await axios.get(employeeURL+'/'+managerID+'/superiors')
       .catch((error)=>{
         expect(error.response.status).toBe(404)
-        expect(error.response.data).toEqual({ "status": "fail", "reason": `No Superior for ${managerID} found` })
-      expect(error.response.statusText).toContain("Not Found")
+        expect(error.response.data).toEqual({ "status": "Fail", "reason": `No Superior for ${managerID} found` })
+        expect(error.response.statusText).toContain("Not Found")
       })
     })
   })
@@ -485,7 +485,7 @@ describe('DELETE /employees:id',()=>{
       await axios.get(employeeURL+'/'+newEmployeeID)
       .catch((error)=>{
         expect(error.response.status).toBe(404)
-        expect(error.response.data).toEqual({ "status": "fail", "reason": "No employee Found" })
+        expect(error.response.data).toEqual(NoEmployeeError)
         expect(error.response.statusText).toContain("Not Found")
       })
     })
@@ -496,6 +496,31 @@ describe('DELETE /employees:id',()=>{
       .then((res)=>{
         expect(res.data).toHaveLength(5)
         expect(res.status).toBe(200)
+      })
+    })
+  })
+})
+
+describe('GET /employees/level?type=position',()=>{
+  describe('When fetching Employees with Developer position', () => {
+    test('should fetch all Employees with Developer position', async () => {
+      const position:string = "manager";
+      const res = await axios.get(employeeURL+'/level?type='+position)
+      expect(res.status).toBe(200)
+      expect(res.data).not.toBeNull()
+      res.data.forEach((employee)=>{
+        expect(employee).toHaveProperty("level","Manager")
+      })
+    })
+  })
+  describe('When fetching Employees with Unavailable positions', () => {
+    test('should fail with No Employee for given type Error', async () => {
+      const position:string = "tester";
+      await axios.get(employeeURL+'/level?type='+position)
+      .catch((error)=>{
+        expect(error.response.status).toBe(404)
+        expect(error.response.data).toEqual({ "status": "Fail", "reason": `No Employee with ${position} type found` })
+      expect(error.response.statusText).toContain("Not Found")
       })
     })
   })

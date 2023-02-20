@@ -18,3 +18,7 @@ export const constants = {
 };
 
 export const error = (id:string,type:string)=>`No ${type} for ${id} found`;
+export const validationError = (error)=> `${error}`;
+export const NoEmployeeError = { "status": "Fail", "reason": "No employee Found" };
+export const NoEmployeeWithIDError = { "status": "Fail", "reason": "No Such Employee with given id present" };
+export const InvalidBodyError = { "status": "Fail", "reason": "Invalid Request Body" };

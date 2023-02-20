@@ -1,7 +1,7 @@
 import { Request, Response, response } from 'express';
 import EmployeeService from '../services/employeeServices';
 import { Employee, EmployeeData } from '../interfaces/employeeInterface';
-import { constants,error } from '../assets/constants';
+import { constants,error,validationError,NoEmployeeError,NoEmployeeWithIDError,InvalidBodyError } from '../assets/constants';
 
 export default class EmployeeController {
     private empService: EmployeeService;
@@ -10,18 +10,18 @@ export default class EmployeeController {
     }
 
     public addEmployees = async (req: Request, res: Response) => {        
-        const valid = await this.empService.employeeValidator(req.body,constants.createBody);
-        if (!valid) {
+        const isvalid = await this.empService.employeeValidator(req.body,constants.createBody);
+        if (!isvalid) {
             try {
                 const employeeData: EmployeeData = req.body;
                 const employee = await this.empService.add(employeeData);
                 return res.status(200).json(employee);
             }
             catch (err) {
-                return res.status(404).json(constants.catchBlockError);
+                return res.status(400).json(constants.catchBlockError);
             }
         } else {
-            return res.status(400).json({ "error": valid });
+            return res.status(400).json({ "error": validationError(isvalid) });
         }
     }
 
@@ -31,10 +31,10 @@ export default class EmployeeController {
                 if (result.length >= 1) {
                     return res.status(200).send(result);
                 } else {
-                    return res.status(404).json({ "status": "Fail", "reason": "No employee Found" });
+                    return res.status(404).json(NoEmployeeError);
                 }
             })
-            .catch (()=>res.status(404).json(constants.catchBlockError))
+            .catch (()=>res.status(400).json(constants.catchBlockError))
     }
 
     public getEmployee = async (req: Request, res: Response) => {
@@ -43,11 +43,11 @@ export default class EmployeeController {
             if (employee.id) {
                 res.status(200).json(employee);
             } else {
-                res.status(404).json({ "status": "fail", "reason": "No employee Found" });
+                res.status(404).json(NoEmployeeError);
             }
         }
         catch (err) {
-            res.status(404).json(constants.catchBlockError);
+            res.status(400).json(constants.catchBlockError);
         }
     }
 
@@ -57,7 +57,7 @@ export default class EmployeeController {
             if (employee) {
                 res.status(200).json(employee);
             } else {
-                res.status(404).json({ "status": "fail", "reason": "No employee Found" });
+                res.status(404).json(NoEmployeeError);
             }
         } catch (error) {
             res.status(400).json(constants.catchBlockError);
@@ -70,20 +70,20 @@ export default class EmployeeController {
             try {
                 const employeeData: EmployeeData = req.body;
                 this.empService.update(Number(req.params.id), employeeData)
-                    .then((result) => {                        
-                        if(result){
-                            res.status(200).send(result);
-                        }else{
-                            return res.status(404).json({ "status": "Fail", "reason": "No Such Employee with given id present" });
-                        }
-                    });
+                .then((result) => {                        
+                    if(result){
+                        res.status(200).send(result);
+                    }else{
+                        return res.status(404).json(NoEmployeeWithIDError);
+                    }
+                });
             }
             catch (err) {
-                return res.status(400).json({ "status": "Fail", "reason": "Invalid Request Body" });
+                return res.status(400).json(InvalidBodyError);
             }
         }
         else{
-            return res.status(400).json({ "status": "Fail", "reason": valid });
+            return res.status(400).json({ "status": "Fail", "reason": validationError(valid)});
         }
     }
 
@@ -93,7 +93,7 @@ export default class EmployeeController {
             if(employeeSuperiors){
                 res.status(200).json(employeeSuperiors);
             } else {
-                res.status(404).json({ "status": "fail", "reason": error(req.params.id,"Superior") });
+                res.status(404).json({ "status": "Fail", "reason": error(req.params.id,"Superior") });
             }            
         } catch (error) {
             res.status(400).json(constants.catchBlockError);
@@ -106,7 +106,7 @@ export default class EmployeeController {
             if(employeeSubordinates.length>0){
                 res.status(200).json(employeeSubordinates);
             } else {
-                res.status(404).json({ "status": "fail", "reason": error(req.params.id,"Subordinate") });
+                res.status(404).json({ "status": "Fail", "reason": error(req.params.id,"Subordinate") });
             }            
         } catch (error) {
             res.status(400).json(constants.catchBlockError);
@@ -121,7 +121,7 @@ export default class EmployeeController {
                 if(employees.length>0){
                     res.status(200).json(employees);
                 } else {
-                    res.status(404).json({ "status": "fail", "reason": `No Employee with ${req.query.type} type found` });
+                    res.status(404).json({ "status": "Fail", "reason": `No Employee with ${req.query.type} type found` });
                 }    
             }
         } catch (error) {
