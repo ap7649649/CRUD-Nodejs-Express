@@ -1,4 +1,4 @@
-import { Request, Response, response } from 'express';
+import { Request, Response } from 'express';
 import EmployeeService from '../services/employeeServices';
 import { Employee, EmployeeData } from '../interfaces/employeeInterface';
 import { constants,error,validationError,NoEmployeeError,NoEmployeeWithIDError,InvalidBodyError } from '../assets/constants';
@@ -102,7 +102,7 @@ export default class EmployeeController {
 
     public getSubordinates = async (req: Request, res: Response) => {
         try {
-            const employeeSubordinates = await this.empService.subordinates(Number(req.params.id));            
+            const employeeSubordinates = await this.empService.subordinates(Number(req.params.id));
             if(employeeSubordinates.length>0){
                 res.status(200).json(employeeSubordinates);
             } else {

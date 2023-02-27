@@ -1,0 +1,9 @@
+{
+    "cache" : false,
+    "check-coverage" :false,
+    "all": true,
+    "extension" : [".js"],
+    "include": ["**/*.js"],
+    "exclude": ["node_modules/**","coverage/**","**/*.test.ts"],
+    "reporter" : ["html","text"]
+}

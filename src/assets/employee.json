@@ -1,59 +1,71 @@
 [
+  null,
   {
-    "id": 1676269842270,
-    "firstName": "Charles",
-    "lastName": "Dmello",
-    "email": "charles@gmail.com",
-    "contact": "7777777777",
-    "dob": "21/02/2000",
-    "doj": "25/02/2020",
+    "id": 1676527316021,
+    "firstName": "Subodh",
+    "lastName": "Parulekar",
+    "email": "subodh@gmail.com",
+    "contact": "98765433210",
+    "dob": "21/01/1992",
+    "doj": "25/05/2008",
     "level": "Manager",
     "manager": "na"
   },
   {
-    "id": 1676269980153,
-    "firstName": "Adil",
-    "lastName": "lanka",
-    "email": "ravan1@gmail.com",
-    "contact": "7777777777",
-    "dob": "21/02/2000",
-    "doj": "25/02/2020",
-    "level": "Developer",
-    "manager": "1676269842270"
-  },
-  {
-    "id": 1676280913068,
-    "firstName": "Alfroy",
-    "lastName": "Narula",
-    "email": "alfroy@gmail.com",
-    "contact": "7777777777",
-    "dob": "21/02/2000",
-    "doj": "25/02/2020",
-    "level": "Intern",
-    "manager": "1676269980153"
-  },
-  {
-    "id": 1676371807670,
-    "firstName": "Melinda",
-    "lastName": "Gates",
-    "email": "melinda@gmail.com",
-    "contact": "7777777777",
-    "dob": "21/02/2000",
-    "doj": "25/02/2020",
-    "level": "Intern",
-    "supervisor": "Developer",
-    "manager": "1676269980153"
-  },
-  {
-    "id": 1676430711178,
+    "id": 1676527316020,
     "firstName": "Nelson",
     "lastName": "Mandela",
     "email": "nelson@gmail.com",
     "contact": "5555555555",
+    "dob": "22-02-00",
+    "doj": "25/02/2020",
+    "level": "Developer",
+    "manager": "1676527316021"
+  },
+  null,
+  {
+    "id": 1676527316019,
+    "firstName": "Steve",
+    "lastName": "Aranha",
+    "email": "steve@gmail.com",
+    "contact": "8097629349",
+    "dob": "21/02/1999",
+    "doj": "25/02/2020",
+    "level": "Intern",
+    "manager": "1676527316020"
+  },
+  {
+    "id": 1677143301684,
+    "firstName": "Soham",
+    "lastName": "Patel",
+    "email": "soham@gmail.com",
+    "contact": "1234123412",
+    "dob": "21/02/1992",
+    "doj": "25/02/2020",
+    "level": "Developer",
+    "manager": "1676527316022"
+  },
+  {
+    "id": 1677143302070,
+    "firstName": "Leo",
+    "lastName": "Dominica",
+    "email": "leo@gmail.com",
+    "contact": "1234123412",
+    "dob": "21/02/1992",
+    "doj": "25/02/2020",
+    "level": "Intern",
+    "manager": "1676527316020"
+  },
+  null,
+  {
+    "id": 1677152310716,
+    "firstName": "Varun",
+    "lastName": "Manthew",
+    "email": "varun@gmail.com",
+    "contact": "5555555555",
     "dob": "21/02/2000",
     "doj": "25/02/2020",
     "level": "Intern",
-    "supervisor": "Manager",
-    "manager": "1676269980153"
+    "manager": "1676527316020"
   }
 ]

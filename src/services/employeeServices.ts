@@ -24,7 +24,7 @@ export default class employeeData {
     public getById = (uid: number): Promise<Employee> => {
         return this.fService.getData()
             .then(data => {
-                const employee = data.find(item => item.id === uid);
+                const employee = data.find(item => item!==null && item.id === uid);
                 if (employee) {
                     if (employee.manager === "na") {
                         Object.defineProperty(employee, 'manager', { enumerable: false })
@@ -50,7 +50,7 @@ export default class employeeData {
     public delete = (empid: number): Promise<Employee> => {
         return this.fService.getData()
             .then((result) => {
-                const eleIndex: number = result.findIndex(item => item.id === empid);
+                const eleIndex: number = result.findIndex(item => item!==null && item.id === empid);
                 if (eleIndex >= 0) {
                     const deleteEmployee = result[eleIndex];
                     delete result[eleIndex];
@@ -64,7 +64,7 @@ export default class employeeData {
     }
     public update = (empid: number, data: EmployeeData): Promise<Employee> => {
         return this.fService.getData().then(result => {
-            const index = result.findIndex((data) => data.id === empid);
+            const index = result.findIndex((data) => data!==null && data.id === empid);
             if (index > -1) {
                 result[index] = { ...result[index], ...data };
                 this.fService.setData(result);
@@ -73,25 +73,61 @@ export default class employeeData {
             return result[index];
         })
     }
-    public subordinates = (empid: number): Promise<Employee[]> => {
-        return this.fService.getData()
-            .then((result) => {
-                return result.filter((data) => data.manager === empid.toString() && data.level !== Emplevels.manager)
-            })
-            .catch(err => { return err });
+
+    public subordinates = async (empid: number): Promise<Employee[]> => {
+        const result: Employee[] = [];
+        const employees = await this.fService.getData();
+        const addSubordinates = (id: number) => {
+            const subordinates = employees.filter((employee) => 
+                employee!==null && employee.manager === id.toString() && employee.level !== Emplevels.manager) as Employee[];
+            subordinates.forEach((user) => {
+                result.push(user);
+                addSubordinates(user.id);
+            });
+        };
+        addSubordinates(empid);
+        return result;
     }
-    public superiors = (empid: number): Promise<Employee> => {
-        return this.fService.getData()
-            .then((result) => {
-                const employee = result.find(user => user.id === empid);
-                if (employee) {
-                    return result.find((data) => data.id === Number(employee.manager) && data.level !== employee.level)
-                } else {
-                    return null;
+
+    public superiors = async (empid: number): Promise<Employee[]> => {
+        const result: Employee[] = [];
+        try {
+            const employees = await this.fService.getData();
+            const addSuperiors = (id: number) => {
+                const employee : Employee = employees.find((employee) => employee!==null && employee.id === id) as Employee;
+                if (employee.manager !== 'na') {
+                    const superior = employees.find((user) => {
+                        if(user!==null){
+                            return user.id === Number(employee.manager) && user.level !== employee.level
+                        }}) as Employee;
+                    if (superior) {
+                        result.push(superior);
+                        addSuperiors(superior.id);
+                    }
                 }
-            })
-            .catch(err => { return err });
+                };
+                addSuperiors(empid);
+                return result;
+        } catch (error) {           
+            throw error;
+        }
     }
+
+    public getlevel = (level: string): Promise<Employee[]> => {
+        return this.fService.getData()
+            .then((result) => {
+                result.filter(element => {
+                    if (element !== null) {
+                        if (element.manager === "na") {
+                            Object.defineProperty(element, 'manager', { enumerable: false })
+                        }
+                    }
+                })
+                return result.filter(data => data !== null && data.level.toLowerCase() === level.toLowerCase())
+            })
+            .catch((err) => { return err });
+    }
+
     public employeeValidator = async (employeeBody: EmployeeData, flag: string): Promise<string> => {
         if (flag === constants.createBody) {
             if (!employeeBody.firstName || !employeeBody.lastName || !employeeBody.email || !employeeBody.contact || !employeeBody.dob || !employeeBody.doj || !employeeBody.level) {
@@ -108,7 +144,7 @@ export default class employeeData {
             return constants.invalidEmailError;
         }
         if (employeeBody.email) {
-            const isDuplicate: boolean = (await Promise.resolve(this.fService.getData())).some((user) => user.email === employeeBody.email);
+            const isDuplicate: boolean = (await Promise.resolve(this.fService.getData())).some((user) => user!==null && user.email === employeeBody.email);
             if (isDuplicate) {
                 return constants.duplicateEmailError;
             }
@@ -128,19 +164,5 @@ export default class employeeData {
             }
         }
         return constants.null;
-    }
-    public getlevel = (level: string): Promise<Employee[]> => {
-        return this.fService.getData()
-            .then((result) => {
-                result.filter(element => {
-                    if (element !== null) {
-                        if (element.manager === "na") {
-                            Object.defineProperty(element, 'manager', { enumerable: false })
-                        }
-                    }
-                })
-                return result.filter(data => data !== null && data.level.toLowerCase() === level.toLowerCase())
-            })
-            .catch((err) => { return err });
     }
 }
